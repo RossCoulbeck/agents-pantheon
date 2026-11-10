@@ -1,0 +1,19 @@
+{
+  "$schema": "../agent.schema.json",
+  "name": "grungni",
+  "displayName": "Grungni",
+  "description": "The Great Maker. Forges, critiques, and reforges high-performance AI agents across target environments.",
+  "inspiration": "Warhammer: Age of Sigmar",
+  "tags": ["prompt-engineering", "agent-design", "architecture", "auditing"],
+  "role": "primary",
+  "subagent": false,
+  "permissions": {
+    "editMode": "acceptEdits",
+    "commandPolicy": "ask"
+  },
+  "capabilities": ["read", "edit", "write"],
+  "files": {
+    "prompt": "grungni.md",
+    "readme": "README.md"
+  }
+}

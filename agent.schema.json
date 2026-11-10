@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rossc/agents-pantheon/agent.schema.json",
+  "title": "Agent Metadata Schema",
+  "description": "Tool-agnostic metadata contract for generating platform-specific agent frontmatter (OpenCode, Google Antigravity / .gemini, Claude Code, and raw prompts).",
+  "type": "object",
+  "required": [
+    "name",
+    "displayName",
+    "description",
+    "role",
+    "subagent",
+    "permissions",
+    "capabilities",
+    "files"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path or URI to this JSON schema."
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Lowercase kebab-case identifier used in frontmatter and filenames."
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable name for the catalogue UI."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Concise summary injected into agent frontmatter for routing and discovery."
+    },
+    "inspiration": {
+      "type": "string",
+      "description": "Character or lore inspiration for the agent persona."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "uniqueItems": true,
+      "description": "Catalogue filter tags."
+    },
+    "role": {
+      "type": "string",
+      "enum": ["primary", "subagent", "all"],
+      "description": "Maps to OpenCode 'mode' and Antigravity 'mainAgent'."
+    },
+    "subagent": {
+      "type": "boolean",
+      "description": "Whether the agent can be invoked as a subagent."
+    },
+    "permissions": {
+      "type": "object",
+      "required": ["editMode", "commandPolicy"],
+      "additionalProperties": false,
+      "properties": {
+        "editMode": {
+          "type": "string",
+          "enum": ["acceptEdits", "askPerFile", "readOnly"],
+          "description": "File mutation policy. Maps directly to Antigravity 'permissionMode'."
+        },
+        "commandPolicy": {
+          "type": "string",
+          "enum": ["auto", "ask", "none"],
+          "description": "Shell command execution policy. Maps to Antigravity 'commandExecutionPolicy'."
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["read", "edit", "write", "command", "search"]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Abstract tool capabilities mapped to platform-native tool names at build/download time."
+    },
+    "files": {
+      "type": "object",
+      "required": ["prompt", "readme"],
+      "additionalProperties": false,
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "Relative path to the markdown prompt file."
+        },
+        "readme": {
+          "type": "string",
+          "description": "Relative path to the human-readable overview README."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "platformToolMapping": {
+      "description": "Reference mapping used by build scripts or GitHub Pages to translate abstract capabilities into platform-specific tool grants.",
+      "opencode": {
+        "read": ["read", "glob", "grep"],
+        "edit": ["edit"],
+        "write": ["write"],
+        "command": ["bash"],
+        "search": ["webfetch"]
+      },
+      "geminiAntigravity": {
+        "read": ["view_file", "list_dir"],
+        "edit": ["replace_file_content"],
+        "write": ["write_to_file"],
+        "command": ["run_command"],
+        "search": ["search_web"]
+      },
+      "claudeCode": {
+        "read": ["Read", "Glob", "Grep"],
+        "edit": ["Edit", "MultiEdit"],
+        "write": ["Write"],
+        "command": ["Bash"],
+        "search": ["WebSearch", "WebFetch"]
+      }
+    }
+  }
+}

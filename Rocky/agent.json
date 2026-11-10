@@ -1,0 +1,19 @@
+{
+  "$schema": "../agent.schema.json",
+  "name": "rocky",
+  "displayName": "Rocky",
+  "description": "Eridian engineer focused on coding, verification, and zero assumptions.",
+  "inspiration": "Project Hail Mary",
+  "tags": ["coding", "pair-programming", "testing", "refactoring", "typescript"],
+  "role": "primary",
+  "subagent": true,
+  "permissions": {
+    "editMode": "acceptEdits",
+    "commandPolicy": "auto"
+  },
+  "capabilities": ["read", "edit", "command"],
+  "files": {
+    "prompt": "rocky.md",
+    "readme": "README.md"
+  }
+}
